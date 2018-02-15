@@ -37,7 +37,7 @@ defmodule MultiFormat do
           get("/test", PageController, :index) |> multi()
 
           # Does allow only `/test2.json` based on the explicitly given pair
-          get("/test2", PageController, :index) |> multi(jason: "json")
+          get("/test2", PageController, :index) |> multi(match_json: "json")
         end
       end
 
