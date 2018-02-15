@@ -80,45 +80,45 @@ defmodule MultiFormat do
         opts -> Enum.uniq_by(opts, fn {_pipeline, ext} -> ext end)
       end
 
-    handle_path = fn
-      "/", _ ->
-        raise ArgumentError, "Does only work with non-root paths."
-
-      path, ext ->
-        case Path.basename(path) do
-          "*" <> _ ->
-            raise ArgumentError, "Does not work with wildcard paths."
-
-          ":" <> _ ->
-            raise ArgumentError, "Does not work with paths ending with params."
-
-          _ ->
-            dotted_ext = if ext == "", do: "", else: ".#{ext}"
-            path <> dotted_ext
-        end
-    end
-
-    build_scope = fn route, pipeline, ext ->
-      quote do
-        scope "/", assigns: %{multi_ext: unquote(ext)} do
-          pipe_through(unquote(pipeline))
-          unquote(route)
-        end
-      end
-    end
-
     case ast do
       {:match, meta, [method, path | rest]} ->
         Enum.map(opts, fn {pipeline, ext} ->
-          {:match, meta, [method, handle_path.(path, ext) | rest]}
-          |> build_scope.(pipeline, ext)
+          {:match, meta, [method, handle_path(path, ext) | rest]}
+          |> build_scope(pipeline, ext)
         end)
 
       {method, meta, [path | rest]} ->
         Enum.map(opts, fn {pipeline, ext} ->
-          {method, meta, [handle_path.(path, ext) | rest]}
-          |> build_scope.(pipeline, ext)
+          {method, meta, [handle_path(path, ext) | rest]}
+          |> build_scope(pipeline, ext)
         end)
+    end
+  end
+
+  defp build_scope(route, pipeline, ext) do
+    quote do
+      scope "/", assigns: %{multi_ext: unquote(ext)} do
+        pipe_through(unquote(pipeline))
+        unquote(route)
+      end
+    end
+  end
+
+  defp handle_path("/", _) do
+    raise ArgumentError, "Does only work with non-root paths."
+  end
+
+  defp handle_path(path, ext) do
+    case Path.basename(path) do
+      "*" <> _ ->
+        raise ArgumentError, "Does not work with wildcard paths."
+
+      ":" <> _ ->
+        raise ArgumentError, "Does not work with paths ending with params."
+
+      _ ->
+        dotted_ext = if ext == "", do: "", else: ".#{ext}"
+        path <> dotted_ext
     end
   end
 end
