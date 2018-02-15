@@ -37,11 +37,8 @@ defmodule MultiFormat.MixProject do
 
   defp package() do
     [
-      # This option is only needed when you don't want to use the OTP application name
-      name: "MultiFormat",
-      # These are the default files included in the package
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
-      maintainers: ["Benjamin Milde", "José Valim"],
+      maintainers: ["Benjamin Milde"],
       licenses: ["Apache 2.0"],
       links: %{"GitHub" => "https://github.com/LostKobrakai/multi_format"}
     ]

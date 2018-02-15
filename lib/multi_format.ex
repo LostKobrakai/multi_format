@@ -3,7 +3,7 @@ defmodule MultiFormat do
   `MultiFormat` is a helper for `Phoenix.Router` when working with multi format 
   routes.
 
-  It allows routes to match for one or more extentions (or none) without
+  It allows routes to match for one or more extensions (or none) without
   having to manually define all of them and assigning pipelines with the 
   matching `plug :accepts, …`.
 
@@ -46,13 +46,13 @@ defmodule MultiFormat do
       defmodule MyAppWeb.PageController do
         use MyAppWeb, :controller
 
-        # Overriding `action/2` makes matching on extentions easier
+        # Overriding `action/2` makes matching on extensions easier
         def action(conn, _) do
           args = [conn, conn.params, conn.assigns]
           apply(__MODULE__, action_name(conn), args)
         end
 
-        # Match for the extentionless html setup
+        # Match for the extensionless html setup
         def index(conn, _params, %{match_ext: ""}) do
           render(conn, "index.html")
         end
