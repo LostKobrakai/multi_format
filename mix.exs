@@ -5,7 +5,7 @@ defmodule MultiFormat.MixProject do
     [
       name: "MultiFormat",
       app: :multi_format,
-      version: "0.1.0",
+      version: "0.1.2",
       elixir: "~> 1.4",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -26,7 +26,7 @@ defmodule MultiFormat.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.0"},
-      {:ex_doc, "~> 0.18.3"}
+      {:ex_doc, "~> 0.18.3", only: :dev, runtime: false}
     ]
   end
 
